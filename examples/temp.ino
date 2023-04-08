@@ -62,7 +62,6 @@ void setup() {
   }
 
   dht.begin();
-
 }
 
 void loop() {
@@ -73,7 +72,7 @@ void loop() {
   if (millis() - displayTimer >= 1000) {
     humidity = dht.readHumidity();
     temperature = dht.readTemperature();
-    float humtemp[] = {humidity, temperature};
+    float humtemp[] = { humidity, temperature };
     displayTimer = millis();
 
     // Send an 'M' type message containing the current millis()
