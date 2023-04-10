@@ -6,7 +6,7 @@
 #include "DHT.h"
 
 #define DHTTYPE DHT22
-#define DHT22_Pin 2
+#define DHT22_Pin 7
 
 DHT dht(DHT22_Pin, DHTTYPE);
 
@@ -30,6 +30,8 @@ void setup() {
 
   // Read NodeID from EEPROM
   int node_id = EEPROM.read(0);
+
+  //EEPROM.write(0, 255);
 
   // Check if NodeID is unset. If true reset NodeID to 255
   if (node_id == 0) {
@@ -69,11 +71,13 @@ void loop() {
   mesh.update();
 
   // Write Message every 1s
-  if (millis() - displayTimer >= 1000) {
+  if (millis() - displayTimer >= 5000) {
     humidity = dht.readHumidity();
     temperature = dht.readTemperature();
     float humtemp[] = { humidity, temperature };
     displayTimer = millis();
+
+    Serial.println(humtemp[0]);
 
     // Send an 'M' type message containing the current millis()
     if (!mesh.write(&humtemp, 90, sizeof(humtemp))) {
@@ -91,7 +95,7 @@ void loop() {
         Serial.println("Send fail, Test OK");
       }
     } else {
-      Serial.print("Send OK: ");
+      Serial.println("Send OK: ");
     }
   }
 
