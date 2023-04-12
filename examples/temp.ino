@@ -77,8 +77,6 @@ void loop() {
     float humtemp[] = { humidity, temperature };
     displayTimer = millis();
 
-    Serial.println(humtemp[0]);
-
     // Send an 'M' type message containing the current millis()
     if (!mesh.write(&humtemp, 90, sizeof(humtemp))) {
 
@@ -95,7 +93,7 @@ void loop() {
         Serial.println("Send fail, Test OK");
       }
     } else {
-      Serial.println("Send OK: ");
+   Serial.println("Send OK! Luftfeuchtigkeit: " + String(humtemp[0]) + ", Temperatur: " + String(humtemp[1]));
     }
   }
 
