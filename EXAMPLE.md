@@ -9,6 +9,7 @@ In dieser Einheit geht es darum, erste Schritte mit dem NRF24 System zu machen u
 - Jumperkabel (w/w)
 
 ## Erklärung NRF24 System
+Das Projekt verwendet ein Funksystem welches über den NRF24 Chip aufgebaut wird. Damit die Kommunikation zwischen vielen unterschiedlichen Chips einfacher zu handhaben ist. Verwenden wir ein Mesh System welches große Teile der Kommunikation zwischen Nodes abstrahiert. Jede Node bekommt eine einzigarte ID zugewiesen wodruch Nachrichten eindeutig zugewiesen werden können. Im folgenden stellen wir bereits eine grundlegende Funk Kommunikation zur verfügung.
 
 ## Code
 ```ino
@@ -17,16 +18,19 @@ In dieser Einheit geht es darum, erste Schritte mit dem NRF24 System zu machen u
 #include "RF24Network.h"
 #include "RF24Mesh.h"
 #include <SPI.h>
-
-//Configure the nrf24l01 CE and CSN pins
+```
+```ino
 RF24 radio(9, 10);
 RF24Network network(radio);
 RF24Mesh mesh(radio, network);
-
+```
+```ino
 uint32_t displayTimer = 0;
 
 void (*resetFunc)(void) = 0;
+```
 
+```ino
 void setup() {
 
   Serial.begin(115200);
@@ -67,7 +71,8 @@ void setup() {
     }
   }
 }
-
+```
+```ino
 void loop() {
 
   mesh.update();
@@ -77,7 +82,7 @@ void loop() {
     displayTimer = millis();
 
     // Send an 'M' type message containing the current millis()
-    if (!mesh.write(&displayTimer, 'M', sizeof(displayTimer))) {
+    if (!mesh.write(&displayTimer, 95, sizeof(displayTimer))) {
 
       // If a write fails, check connectivity to the mesh network
       if (!mesh.checkConnection()) {
@@ -109,5 +114,7 @@ void loop() {
 }
 ```
 ## Aufgabe 1
+Der Ardunio soll im nächsten Schritt mit einem Sensor verbunden werden und die Daten von diesem sollen im Ardunio ausgelesen werden können. Als Sensor bietet sich hierbei ein (Humidity and Temperature) Sensor an welche die aktuelle Temperatur und Feuchtigkeit in der Luft auslesen kann. Zunächst soll eine passende Bibliothek eingebunden werden, welche das auslesen des Sensors ermöglicht. Im nächsten Schritt soll diese initialisiert werden und anschließend sollen die Daten ausgelesen werden können. Hierfür beitet sich eine Serielle Ausgabe an.
 
 ## Aufgabe 2
+Nachdem die Daten im Arduino ausgelesen werden können. Sollen diese im Nächsten Schritt über das Mesh System versendet werden. Hierfür wird die NRF24 Bibliotheken verwendet welche bereits hinzugefügt und konfiguriert wurden. Im nächsten Schritt müssen nun die SensorDaten über das Mesh System versendet werden. Hierbei muss auf die richtige Größe der versendeten Nachricht geachtet werden, sodass die Nachricht im Mesh Master korrekt decoded werden kann.
