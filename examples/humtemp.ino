@@ -77,7 +77,7 @@ void loop() {
     float humtemp[] = { humidity, temperature };
     displayTimer = millis();
 
-    // Send an 'M' type message containing the current millis()
+    // Send an '90' type message containing the current data()
     if (!mesh.write(&humtemp, 90, sizeof(humtemp))) {
 
       // If a write fails, check connectivity to the mesh network
