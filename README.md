@@ -12,6 +12,28 @@ Wir starten den Code mit dem hinzufügen der relevanten Bibliotheken:
 #include <SPI.h>
 #include "DHT.h"
 ```
-Dabei ist der letzte Eintrag **"DHT.h** nicht allgemein gültig sondern stellt hier die passende Bibliothek für den Luftfeuchtigkeits- und Temperatursensor dar.
+Dabei ist der letzte Eintrag **"DHT.h** nicht allgemein gültig, sondern stellt hier die passende Bibliothek für den Luftfeuchtigkeits- und Temperatursensor dar.
 
-Neben den ganzen Bibliotheken für das NRF24 Funksystem 
+Neben den ganzen Bibliotheken für das NRF24-Funksystem, darunter zählt auch **"SPI.h"**, fügen wir noch **EEPROM** hinzu. Dies stellt einen permanenten Speicher da, wie er beispielsweise auf einem Arduino Nano vorhanden ist. Stelle sicher, dass der Mikrocontroller den du verwendest dieses Speichermedium besitzt (es ist natürlich auch möglich einen anderweitigen permanenten Speicher zu nutzen, dies erfordert allerdings eine Anpassung des Codes).
+
+Als nächstes definierien wir die Variablen des Sensors und der zugehörigen Pins. Passe dies nach beliben an deinen verwendeten Sensor an. Du findest zu den meisten Sensoren gut ausgearbeitete Anleitungen im Internet.
+```ino
+#define DHTTYPE DHT22
+#define DHT22_Pin 7
+
+DHT dht(DHT22_Pin, DHTTYPE);
+
+float humidity, temperature;
+```
+
+In diesem Teil wird das NRF24l01-Modul konfiguriert. Achte besonders auf die richtige Verkabelung der Pins. Dabei wird der "CE" an Pin 9 und der "CSN" an Pin 10 angeschlossen. 
+```ino
+//Configure the nrf24l01 CE and CSN pins
+RF24 radio(9, 10);
+RF24Network network(radio);
+RF24Mesh mesh(radio, network);
+
+uint32_t displayTimer = 0;
+
+void (*resetFunc)(void) = 0;
+```
