@@ -90,7 +90,7 @@ void loop() {
   if (lastState == LOW && currentState == HIGH) {
     Serial.println("The sensor is touched");
 
-    // Send an 'M' type message containing the current millis()
+    // Send an '91' type message containing the current data()
     if (!mesh.write(&currentState, 91, sizeof(currentState))) {
 
       // If a write fails, check connectivity to the mesh network
