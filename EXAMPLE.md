@@ -1,6 +1,6 @@
 # Einheit 1
 
-In dieser Einheit geht es darum, erste Schritte mit dem NRF24 System zu machen und Sensordaten über das System an den Mesh Master zu senden.
+In dieser Einheit geht es darum, erste Schritte mit dem NRF24 System zu machen und Sensordaten über das System an den Mesh Master zu senden. Hierbei wird vorausgesetzt das die Box mit dem Mesh Master und Webserver bereits läuft und Daten empfangen und verarbeiten kann.
 
 ## Materialien
 - Arduino
@@ -9,7 +9,7 @@ In dieser Einheit geht es darum, erste Schritte mit dem NRF24 System zu machen u
 - Jumperkabel (w/w)
 
 ## Erklärung NRF24 System
-Das Projekt verwendet ein Funksystem welches über den NRF24 Chip aufgebaut wird. Damit die Kommunikation zwischen vielen unterschiedlichen Chips einfacher zu handhaben ist. Verwenden wir ein Mesh System welches große Teile der Kommunikation zwischen Nodes abstrahiert. Jede Node bekommt eine einzigarte ID zugewiesen wodruch Nachrichten eindeutig zugewiesen werden können. Im folgenden stellen wir bereits eine grundlegende Funk Kommunikation zur verfügung.
+Das Projekt verwendet ein Funksystem, welches über den NRF24 Chip aufgebaut wird. Damit die Kommunikation zwischen vielen unterschiedlichen Chips einfacher zu handhaben ist. Verwenden wir ein Mesh System welche großen Teile der Kommunikation zwischen Nodes abstrahiert. Jede Node bekommt eine einzigarte ID zugewiesen, wodurch Nachrichten eindeutig zugewiesen werden können. Im Folgenden stellen wir bereits eine grundlegende Funk Kommunikation zur Verfügung.
 
 ## Code
 ```ino
@@ -114,7 +114,7 @@ void loop() {
 }
 ```
 ## Aufgabe 1
-Der Ardunio soll im nächsten Schritt mit einem Sensor verbunden werden und die Daten von diesem sollen im Ardunio ausgelesen werden können. Als Sensor bietet sich hierbei ein (Humidity and Temperature) Sensor an welche die aktuelle Temperatur und Feuchtigkeit in der Luft auslesen kann. Zunächst soll eine passende Bibliothek eingebunden werden, welche das auslesen des Sensors ermöglicht. Im nächsten Schritt soll diese initialisiert werden und anschließend sollen die Daten ausgelesen werden können. Hierfür beitet sich eine Serielle Ausgabe an.
+Der Arduino soll im nächsten Schritt mit einem Sensor verbunden werden und die Daten von diesem sollen im Arduino ausgelesen werden können. Als Sensor bietet sich hierbei ein (Humidity and Temperature) Sensor an welche die aktuelle Temperatur und Feuchtigkeit in der Luft auslesen kann. Zunächst soll eine passende Bibliothek eingebunden werden, welche das Auslesen des Sensors ermöglicht. Im nächsten Schritt soll diese initialisiert werden und anschließend sollen die Daten ausgelesen werden können. Hierfür bietet sich eine Serielle Ausgabe an.
 
 ## Aufgabe 2
-Nachdem die Daten im Arduino ausgelesen werden können. Sollen diese im Nächsten Schritt über das Mesh System versendet werden. Hierfür wird die NRF24 Bibliotheken verwendet welche bereits hinzugefügt und konfiguriert wurden. Im nächsten Schritt müssen nun die SensorDaten über das Mesh System versendet werden. Hierbei muss auf die richtige Größe der versendeten Nachricht geachtet werden, sodass die Nachricht im Mesh Master korrekt decoded werden kann.
+Nachdem die Daten im Arduino ausgelesen werden können. Sollen diese im Nächsten Schritt über das Mesh System versendet werden. Hierfür wird die NRF24 Bibliotheken verwendet welche bereits hinzugefügt und konfiguriert wurden. Im nächsten Schritt müssen nun die Sensor Daten über das Mesh System versendet werden. Hierbei muss auf die richtige Größe der versendeten Nachricht geachtet werden, sodass die Nachricht im Mesh Master korrekt decoded werden kann. Anschließend sollten die gesendeten Daten im Dashboard des Web Servers auftauchen.
