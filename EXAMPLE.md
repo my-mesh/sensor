@@ -136,3 +136,6 @@ Der Arduino soll im nächsten Schritt mit einem Sensor verbunden werden und die 
 
 ## Aufgabe 2
 Nachdem die Daten im Arduino ausgelesen werden können. Sollen diese im Nächsten Schritt über das Mesh System versendet werden. Hierfür wird die NRF24 Bibliotheken verwendet welche bereits hinzugefügt und konfiguriert wurden. Im nächsten Schritt müssen nun die Sensor Daten über das Mesh System versendet werden. Hierbei muss auf die richtige Größe der versendeten Nachricht geachtet werden, sodass die Nachricht im Mesh Master korrekt decoded werden kann. Anschließend sollten die gesendeten Daten im Dashboard des Web Servers auftauchen.
+
+## Lösung
+Die Lösung sowie weitere Hilfestellungen finden sich im [Github Projekt](https://github.com/my-mesh)
