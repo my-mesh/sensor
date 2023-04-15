@@ -40,7 +40,7 @@ uint32_t displayTimer = 0;
 void (*resetFunc)(void) = 0;
 ```
 ### Setup
-Im Setup ist die Logik für die Zuweisung einer neuen Node implementiert (ausgehend vom [Mesh Master](https://github.com/my-mesh/mesh#readme)) und es wird eine Verbindung zum Mesh aufgebaut. Für ersteres wird überprüft ob der erste Eintrag des EEPROM gleich 0 ist und wird dann auf 255 gesetzt. Das geschieht, damit der Master die Node beim erstmaligen ausführen als neue Node erkennt.
+Im Setup ist die Logik für die Zuweisung einer neuen Node implementiert (ausgehend vom [Mesh Master](https://github.com/my-mesh/mesh#readme)) und es wird eine Verbindung zum Mesh aufgebaut. Für ersteres wird überprüft ob der erste Eintrag des EEPROM gleich 0 ist und wird dann auf 255 gesetzt. Das geschieht, damit der Master die Node beim erstmaligen ausführen als neue Node erkennt. Der gesamte Abschnitt kann so übernommen werden. Sollte dein Sensor im Setup Code benötigen füge Ihn nach "//Connect to the mesh" ein, an die Stelle wo "dht.begin();" steht und ersetze diese Zeile.
 ```ino
 void setup() {
 
@@ -85,5 +85,58 @@ void setup() {
   }
 
   dht.begin();
+}
+```
+### Loop
+In dem Loop Abschnitt werden die Daten deines Sensors gelesen und an den Master gesendet. In diesem Beispiel möchten wir nicht durchgehend Daten lesen und senden, weswegen dieser "Timer" implementiert wurde. Passe den Timer nach belieben an und füge innerhalb des If-Statements deine relevanten Sensor-Funktionen ein um an die Daten zu kommen. Speichere diese in passende Variablen ab. In diesem Fall arbeiten wir mit einem Sensor der zwei verschiedene Datentypen gleichzeitig misst, weswegen wir diese in einer gemeinsamen Variable eines Arrays packen.
+```ino
+void loop() {
+
+  mesh.update();
+
+  // Write Message every 1s
+  if (millis() - displayTimer >= 5000) {
+    humidity = dht.readHumidity();
+    temperature = dht.readTemperature();
+    float humtemp[] = { humidity, temperature };
+    displayTimer = millis();
+```
+
+Hier werden die Daten gesendet. Achte darauf einen schon vorhandenen Messagetype zu verwenden. Schreibe deine Variable genau wie in diesem Beispiel zweimal in das If-Statement.
+```ino
+    // Send an '90' type message containing the current data()
+    if (!mesh.write(&humtemp, 90, sizeof(humtemp))) {
+```
+    
+Der letzte Abschnitt beinhaltet eine Konnektivitätsüberprüfung und den Empfang von Nachrichten vom Master an die Node zur Setzung der Node-ID.
+Um die Daten zu überprüfen ist ein "Serial.print" mit den Variabeln des Sensors eingefügt worden.
+```ino
+
+      // If a write fails, check connectivity to the mesh network
+      if (!mesh.checkConnection()) {
+        //refresh the network address
+        Serial.println("Renewing Address");
+        if (mesh.renewAddress() == MESH_DEFAULT_ADDRESS) {
+          //If address renewal fails, reconfigure the radio and restart the mesh
+          //This allows recovery from most if not all radio errors
+          mesh.begin();
+        }
+      } else {
+        Serial.println("Send fail, Test OK");
+      }
+    } else {
+   Serial.println("Send OK! Luftfeuchtigkeit: " + String(humtemp[0]) + ", Temperatur: " + String(humtemp[1]));
+    }
+  }
+
+  // Check for incomming Messages
+  while (network.available()) {
+    RF24NetworkHeader header;
+    uint8_t new_id;
+    network.read(&header, &new_id);
+    Serial.println("New ID: " + String(new_id));
+    EEPROM.write(0, new_id);
+    resetFunc();
+  }
 }
 ```
